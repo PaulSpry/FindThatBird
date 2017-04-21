@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>catepillar feast</title>
+
+<!-- as of ZIM 4.3.0 load createjs namespace first -->
+<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+<script>var zon = true; // true for comments from zim code</script>
+<script src="https://d309knd7es5f10.cloudfront.net/zim_4.8.1.js"></script>
+<script src="scripts/view.js"></script>
+<script src="scripts/controller.js"></script>
+
+
+<script>
+
+// SCALING OPTIONS
+// scaling can have values as follows with full being the default
+// "fit"		sets canvas and stage to dimensions and scales to fit inside window size
+// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+// "full"		sets stage to window size with no scaling
+// "tagID"		add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+
+var scaling = "full"; // makes stage the window size but does not scale content
+var width = null;
+var height = null;
+var color = "white";
+var frame = new zim.Frame(scaling, width, height, color); // see docs for more options and info
+frame.on("ready", function() {
+
+frame.loadAssets(["angrybird.png","Title.png","mainsong.mp3"], "assets/");
+
+frame.on("complete", function(){
+
+	var stage = frame.stage;
+	var stageW = frame.width;
+	var stageH = frame.height;
+
+	var song = frame.asset("mainsong.mp3");
+	song.play();
+
+
+	var holder = new zim.Container();
+	stage.addChild(holder);
+
+	var title = frame.asset("Title.png");
+				holder.addChild(title);
+				title.x = stageW/2-330;
+				title.y = stageH/2-300;
+				zim.scale(title, .15);
+
+
+
+
+
+
+	var catepillar = new zim.Container();
+		stage.addChild(catepillar);
+
+
+		var num = 30;
+		var minDamp = .02;
+		var maxDamp = .04;
+		var minAlpha = .1;
+		var maxAlpha = .4;
+		var c;
+		for (var i=0; i<num; i++) {
+			c = new zim.Circle(30, frame.black);
+			c.center(catepillar);
+			c.dX = new zim.Damp(c.x, minDamp+i*(maxDamp-minDamp)/num);
+			c.dY = new zim.Damp(c.y, minDamp+i*(maxDamp-minDamp)/num);
+			c.alpha = minAlpha+i*(maxAlpha-minAlpha)/num;
+		}
+
+		var interval;
+		var interval2;
+		var flag = "off";
+
+
+		stage.on("stagemousedown", function(){
+			zog(flag);
+			if (flag == "off") {
+				zog("Starting");
+				interval = setInterval(animate, 500); //PLANTS
+				interval2 = setInterval(animate2, 5); //BALL DRAG DAMP
+
+				flag = "on";
+				zog(flag);
+			}
+		});
+
+		function animate2() {
+			//drag stuff goes here
+			var c;
+			for (var i=0; i<num; i++) {
+				c = catepillar.getChildAt(i);
+				c.x = c.dX.convert(stage.mouseX);
+				c.y = c.dY.convert(stage.mouseY);
+			}
+		}
+
+		function animate() {
+
+
+			// var c;
+			// for (var i=0; i<num; i++) {
+			// 	c = catepillar.getChildAt(i);
+			// 	c.x = c.dX.convert(stage.mouseX);
+			// 	c.y = c.dY.convert(stage.mouseY);
+			// }
+
+
+		stage.on("stagemouseup", function() {
+			zog(flag);
+			if (flag == "on") {
+				clearInterval(interval);
+				clearInterval(interval2);
+				zog("Clearing");
+				flag = "off";
+				zog(flag);
+			}
+		});
+
+
+		var plantbox = new zim.Container()
+	        stage.addChild(plantbox);
+
+					// plantbox.height = stageW;
+					// plantbox.width = stageW;
+
+		var angrybird = frame.asset("angrybird.png");
+		var angrybirdClone = angrybird.clone();
+		angrybirdClone.scale(.1);
+		angrybirdClone.y = zim.rand(0, stage.getBounds().height - angrybirdClone.height);
+		angrybirdClone.x = zim.rand(0, stage.getBounds().width- angrybirdClone.width);
+		plantbox.addChild(angrybirdClone);
+
+		var locations = [
+			stage.getBounds().width/8,
+			stage.getBounds().width/8 * 3,
+			stage.getBounds().width/8 * 5,
+			stage.getBounds().width/8 * 7
+		];
+
+		var locations2 = [
+			stage.getBounds().height/8,
+			stage.getBounds().height/8 * 3,
+			stage.getBounds().height/8 * 5,
+			stage.getBounds().height/8 * 7,
+			stage.getBounds().height/8 * 2
+
+
+		];
+
+		var plantClone = angrybirdClone.clone();
+		//plantClone.scale(1);
+		//plantClone.setMask(plantbox);
+
+		var speed2 = 5100;
+		var speed3 = 3000;
+
+		plantClone.regX = plantClone.width;
+		plantClone.regY = plantClone.height;
+		plantClone.x = locations[Math.round(zim.rand(0,3))];
+		// zog(plantClone.x);
+		plantClone.y = locations2[Math.round(zim.rand(0,3))];
+		// zog(plantClone.y);
+		// zog("Plantsssss!");
+		plantbox.addChild(plantClone);
+		// zog("Plantbox has " + plantbox.numChildren + " children.");
+		stage.update();
+
+		for (var i = plantbox.numChildren - 1; i >= 0; i-- ) {
+			//zog("Plantbox has " + plantbox.numChildren + " children in this iLoop.");
+			var plantI = plantbox.getChildAt( i );
+			//zog(plantI);
+
+			(function hitTest() {
+				// for( var i = 0; i < plantbox.numChildren; i++ ){
+				//
+				// }
+				// zog(catepillar);
+				if ( zim.hitTestBounds(catepillar, plantI )) {
+
+					zog("HITTING");
+					zgo("./homescreen.html");
+				};
+			})()
+	};
+
+
+		plantClone.move({
+			y: zim.rand(0, stage.height),
+			x: zim.rand(0, stage.width),
+			time:speed2,
+			wait:Math.round(zim.rand(speed2, speed3)),
+			ease:"linear",
+			//call:hitTest
+		});
+		//zog(plantbox);
+
+}
+	stage.update();
+});
+});
+
+
+
+
+</script>
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>

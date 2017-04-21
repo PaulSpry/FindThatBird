@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>catepillar feast</title>
+
+<!-- as of ZIM 4.3.0 load createjs namespace first -->
+<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+<script>var zon = true; // true for comments from zim code</script>
+<script src="https://d309knd7es5f10.cloudfront.net/zim_4.8.1.js"></script>
+<script src="scripts/view.js"></script>
+<script src="scripts/controller.js"></script>
+
+
+<script>
+
+// SCALING OPTIONS
+// scaling can have values as follows with full being the default
+// "fit"		sets canvas and stage to dimensions and scales to fit inside window size
+// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+// "full"		sets stage to window size with no scaling
+// "tagID"		add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+
+var scaling = "full"; // makes stage the window size but does not scale content
+var width = null;
+var height = null;
+var color = "white";
+var frame = new zim.Frame(scaling, width, height, color); // see docs for more options and info
+frame.on("ready", function() {
+
+	var stage = frame.stage;
+	var stageW = frame.width;
+	var stageH = frame.height;
+
+	frame.loadAssets(["youwin.png","angrybird.png","homescreen.mp3"], "assets/");
+
+	frame.on("complete", function() {
+
+		var mainsong = frame.asset("homescreen.mp3");
+		mainsong.play();
+
+
+		var holder = new zim.Container();
+		stage.addChild(holder);
+
+		var title = frame.asset("youwin.png");
+					holder.addChild(title);
+					title.x = stageW/2-340;
+					title.y = stageH/2-300;
+					zim.scale(title, .2);
+
+		// var angrybird = frame.asset("angrybird.png");
+		// angrybird.scale(.4);
+		// angrybird.y = stageH/2;
+		// angrybird.center(stage);
+
+		var angrybird = frame.asset("angrybird.png");
+			holder.addChild(angrybird);
+			angrybird.x = stageW - 400;
+			angrybird.y = stageH - 500;
+			angrybird.scaleX = angrybird.scaleY = .3;
+			zim.move({
+				target:angrybird,
+				y:100,
+				time:1000,
+				loop:true,
+				rewind:true,
+				sequence:100
+			});
+
+
+		var playagain = new zim.Label("PLAY AGAIN", 30, "Myriad Pro", "#FC954F", "grey",null,null,null,null,null,null, "italic");
+			holder.addChild(playagain);
+			playagain.x = stageW - 280;
+			playagain.y = stageH - 180;
+			zim.scale(playagain, 1.5);
+
+
+			playagain.on("click", function(e) {
+
+
+				zim.animate({
+				target:angrybird,
+				obj:{alpha:0},
+				time:700,
+				call: playagain
+
+			});
+				function playagain(){
+					zgo("index.html")
+				}
+
+
+
+
+
+	stage.update();
+});
+});
+});
+
+
+
+  // end of ready
+ </script>
+ </head>
+
+ <body>
+ <!-- canvas with id="myCanvas" is made by zim Frame -->
+ </body>
+ </html>
