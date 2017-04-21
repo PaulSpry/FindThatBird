@@ -45,9 +45,9 @@ frame.on("ready", function() {
 
 		var title = frame.asset("youwin.png");
 					holder.addChild(title);
-					title.x = stageW/2-340;
-					title.y = stageH/2-300;
-					zim.scale(title, .2);
+					title.x = stageW/2-130;
+					title.y = stageH/2-200;
+					zim.scale(title, .08);
 
 		// var angrybird = frame.asset("angrybird.png");
 		// angrybird.scale(.4);
@@ -56,9 +56,9 @@ frame.on("ready", function() {
 
 		var angrybird = frame.asset("angrybird.png");
 			holder.addChild(angrybird);
-			angrybird.x = stageW - 400;
-			angrybird.y = stageH - 500;
-			angrybird.scaleX = angrybird.scaleY = .3;
+			angrybird.x = stageW - 150;
+			angrybird.y = stageH - 300;
+			angrybird.scaleX = angrybird.scaleY = .1;
 			zim.move({
 				target:angrybird,
 				y:100,
@@ -69,10 +69,10 @@ frame.on("ready", function() {
 			});
 
 
-		var playagain = new zim.Label("PLAY AGAIN", 30, "Myriad Pro", "#FC954F", "grey",null,null,null,null,null,null, "italic");
+		var playagain = new zim.Label("PLAY AGAIN", 20, "Myriad Pro", "#FC954F", "grey",null,null,null,null,null,null, "italic");
 			holder.addChild(playagain);
-			playagain.x = stageW - 280;
-			playagain.y = stageH - 180;
+			playagain.x = stageW/2;
+			playagain.y = stageH - 140;
 			zim.scale(playagain, 1.5);
 
 

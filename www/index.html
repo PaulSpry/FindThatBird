@@ -45,9 +45,9 @@ frame.on("complete", function(){
 
 	var title = frame.asset("Title.png");
 				holder.addChild(title);
-				title.x = stageW/2-330;
-				title.y = stageH/2-300;
-				zim.scale(title, .15);
+				title.x = stageW/2-110;
+				title.y = stageH/2;
+				zim.scale(title, .05);
 
 
 
@@ -65,7 +65,7 @@ frame.on("complete", function(){
 		var maxAlpha = .4;
 		var c;
 		for (var i=0; i<num; i++) {
-			c = new zim.Circle(30, frame.black);
+			c = new zim.Circle(10, frame.black);
 			c.center(catepillar);
 			c.dX = new zim.Damp(c.x, minDamp+i*(maxDamp-minDamp)/num);
 			c.dY = new zim.Damp(c.y, minDamp+i*(maxDamp-minDamp)/num);
@@ -130,7 +130,7 @@ frame.on("complete", function(){
 
 		var angrybird = frame.asset("angrybird.png");
 		var angrybirdClone = angrybird.clone();
-		angrybirdClone.scale(.1);
+		angrybirdClone.scale(.03);
 		angrybirdClone.y = zim.rand(0, stage.getBounds().height - angrybirdClone.height);
 		angrybirdClone.x = zim.rand(0, stage.getBounds().width- angrybirdClone.width);
 		plantbox.addChild(angrybirdClone);
